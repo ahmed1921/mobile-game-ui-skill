@@ -44,7 +44,7 @@ turning reasons into decisions.
   separates groups better than lines do.
 - **People scan, they do not read.** In portrait the scan runs top strip, centre, bottom action.
   *So:* status on top, subject in the middle, action at the bottom. That is the skeleton of
-  nearly every screen in the sample.
+  nearly every screen in top games.
 - **Motion in the corner of the eye pulls attention hard.**
   *So:* use it for exactly one thing per screen, and keep idle loops slow.
 

@@ -1,16 +1,13 @@
-# What 151 top mobile games do
+# What top mobile games do
 
-Sample: 151 games. The first pass (2026-11-26) covered 59: 49 from the US App Store top-grossing and
-top-free game charts plus 10 long-running leaders in battler, roguelite and collector genres. The
-second pass (2026-11-27) added 92 more from the top 100 of both charts. Notes combine each game's
-store screens (three or four per game, viewed on those days) with its widely known in-game layout.
-Store screens are partly marketing art and games change, so check the live game when one detail
-matters. App icons of the top 150 were studied on one sheet: see [icons.md](icons.md).
+How top mobile games lay out their screens, grouped by genre and by the templates many of them
+share. Games change, so check the live game when one detail matters. App icons are covered in
+[icons.md](icons.md).
 
 Contents: tallies · puzzle and board · merge · coin looters and casino · 4X builders · arena and
 card battlers · roguelite and idle RPG · hero collectors · shooters, sports, platforms · runners.
 
-## Tallies across the sample
+## Tallies
 
 - **Orientation:** about three quarters portrait. Landscape is kept for shooters, sports, open-world
   RPGs, MOBAs and a few builders, where two thumbs steer.
@@ -118,12 +115,12 @@ card battlers · roguelite and idle RPG · hero collectors · shooters, sports, 
 | Subway Surfers | Run: score and multiplier top-right, coins under it, pause top-left; nothing else. Menu: character in the middle, big tap-to-play. |
 | Paper.io 2 | Progress bar with percent at the top; your name floats over your piece; results as a burst of coins and one button. |
 
-## Second pass: 92 more games (charts of 2026-11-27)
+## Shared templates
 
-Added from the US top-grossing 100 and top-free 100. One line each: what the screen is made of. The
-families below matter more than any single game, because one template now serves dozens of hits.
+One line each: what the screen is made of. The families below matter more than any single game,
+because one template now serves dozens of hits.
 
-### Family: tray-sort and "jam" puzzles (the 2026 hybrid-casual template)
+### Family: tray-sort and "jam" puzzles (the current hybrid-casual template)
 
 Jelly Busters · Bus Fever Party · Bus Crowd · Jam Bus Sandfall · Yarn Loop · Food Hunt · Cube Smash ·
 Cube Land · Screwdom · Sort Streak · Sand Blocks · Colorever · Triple Match 3D · Triple Match City ·
@@ -213,7 +210,7 @@ and a small SKIP. Palette: purple or red with gold, the most saturated screens i
 | Among Us | Black screen and one coloured role word; tasks are full-screen mini-puzzles with an X and a task bar. |
 | Minecraft | Nine square hotbar slots bottom centre, hearts and hunger over them, a pixel font. |
 
-### What the second pass adds to the tallies
+### More tallies
 
 - **Chrome keeps shrinking.** In the free chart most hits show three header items and one row of
   boosters. If a number is not needed to decide the next tap, it is not on screen.

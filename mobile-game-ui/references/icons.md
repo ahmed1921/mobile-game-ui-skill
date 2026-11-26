@@ -4,13 +4,13 @@ Icons carry more meaning per pixel than anything else in a game UI. A player rea
 lock, a sword or a red dot long before any word. This file covers the store icon, then the icons
 inside the game, then how to draw and test them.
 
-Contents: what the top 150 app icons do · app icon rules · in-game icon families · one style for
+Contents: what top app icons do · app icon rules · in-game icon families · one style for
 the whole set · anatomy of an item icon · currencies and resources · navigation and system icons ·
 badges and states · sizes · how to draw one · testing · common failures.
 
-## What the top 150 app icons do
+## What top app icons do
 
-Studied on one sheet (US top-grossing and top-free games, 2026-11-27), counted by eye:
+Roughly, among the top games:
 
 | Kind | Share | Examples of the idea |
 |------|-------|----------------------|

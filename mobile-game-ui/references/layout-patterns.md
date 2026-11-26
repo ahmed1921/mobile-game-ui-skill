@@ -232,9 +232,9 @@ Shared HUD rules:
 - Chest or pack opening: anticipation shake, burst, items revealed one at a time, summary grid.
 - Hero upgrade: the stat that changed counts up and flashes green on the detail panel.
 
-## Templates the wider sample added
+## More templates
 
-**Tray-sort puzzle** (the hybrid-casual template; about twenty chart games use it):
+**Tray-sort puzzle** (the hybrid-casual template, used by many current hits):
 
 ```
 [coins]      Level 12      [pause]

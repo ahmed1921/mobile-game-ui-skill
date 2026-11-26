@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pocket Orchard: example UI made with the mobile-game-ui skill</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* One system for every screen. Colour roles: green = go, yellow = reward and coins, sky = calm UI, pink = events, red = alerts only. */
+:root{--ink:#2B2145;--cream:#FFF9EC;--go:#58D66B;--go2:#2E9C48;--sun:#FFC93C;--sun2:#D99412;--sky:#5AB8FF;--sky2:#2A86D6;--pink:#FF7FB0;--pink2:#D4558A;--red:#F0443A;--plum:#9B6BFF}
+*{box-sizing:border-box}
+body{margin:0;background:#191430;font-family:'Baloo 2',system-ui,sans-serif;font-weight:700;color:var(--ink)}
+h1{margin:0;padding:26px 16px 4px;text-align:center;color:#fff;font-size:28px;font-weight:800}
+.sub{margin:0 auto 22px;padding:0 16px;max-width:760px;text-align:center;color:#B9B1DA;font-size:15px;font-weight:600;line-height:1.35}
+.row{display:flex;flex-wrap:wrap;justify-content:center;gap:28px;padding:0 16px 40px}
+figure{margin:0}
+figcaption{margin-top:10px;text-align:center;color:#D8D2F2;font-size:15px}
+figcaption b{display:block;color:#fff;font-size:17px}
+.phone{position:relative;width:360px;height:760px;border-radius:36px;overflow:hidden;box-shadow:0 0 0 6px #0D0A1E,0 0 0 8px #3A3160}
+svg{display:block}
+/* display text: white with an ink outline, so it reads on any ground */
+.d{font-weight:800;color:#fff;paint-order:stroke fill;-webkit-text-stroke:5px var(--ink);letter-spacing:.3px}
+/* keycap button: a face, a darker lip under it, an ink ring */
+.k{position:relative;display:flex;align-items:center;justify-content:center;border:0;border-radius:18px;font:inherit;font-weight:800;color:#fff;paint-order:stroke fill;-webkit-text-stroke:4px var(--ink);background:var(--f);box-shadow:0 6px 0 var(--s),0 0 0 3px var(--ink),0 6px 0 3px var(--ink);cursor:pointer;transition:transform .08s ease-out,box-shadow .08s ease-out}
+.k:active{transform:translateY(4px);box-shadow:0 2px 0 var(--s),0 0 0 3px var(--ink),0 2px 0 3px var(--ink)}
+.go{--f:var(--go);--s:var(--go2)} .sun{--f:var(--sun);--s:var(--sun2)} .skyb{--f:var(--sky);--s:var(--sky2)} .pinkb{--f:var(--pink);--s:var(--pink2)} .white{--f:var(--cream);--s:#D9CFB6}
+.pill{display:flex;align-items:center;gap:5px;height:34px;padding:0 12px 0 4px;border-radius:999px;background:rgba(43,33,69,.82);color:#fff;font-size:17px;font-weight:800}
+.dot{position:absolute;top:-7px;right:-7px;min-width:22px;height:22px;padding:0 5px;border-radius:999px;background:var(--red);box-shadow:0 0 0 3px var(--ink);color:#fff;font-size:13px;line-height:22px;text-align:center;-webkit-text-stroke:0;animation:pop .35s cubic-bezier(.34,1.56,.64,1) 1s both}
+.count{position:absolute;right:-6px;bottom:-6px;min-width:22px;height:22px;padding:0 5px;border-radius:999px;background:var(--ink);color:#fff;font-size:13px;line-height:22px;text-align:center;-webkit-text-stroke:0}
+/* motion: arrivals ease out with a little overshoot, loops are slow and small */
+@keyframes pop{from{scale:0}to{scale:1}}
+@keyframes drop{from{translate:0 -70px;opacity:0}to{translate:0 0;opacity:1}}
+@keyframes rise{from{translate:0 80px;opacity:0}to{translate:0 0;opacity:1}}
+@keyframes breathe{0%,100%{scale:1}50%{scale:1.045}}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -5px}}
+@keyframes spin{to{rotate:360deg}}
+@keyframes sweep{0%{translate:-140% 0}45%,100%{translate:520% 0}}
+@keyframes ring{0%{scale:.6;opacity:.9}100%{scale:1.7;opacity:0}}
+@keyframes tap{0%,100%{translate:0 0;scale:1}40%{translate:-6px -6px;scale:.9}}
+@keyframes stamp{0%{scale:2.6;opacity:0;rotate:-25deg}70%{scale:.92;opacity:1}100%{scale:1;opacity:1;rotate:0deg}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes fall{0%{translate:0 -40px;rotate:0deg;opacity:1}100%{translate:var(--dx) 800px;rotate:540deg;opacity:.9}}
+@keyframes twinkle{0%,100%{scale:.4;opacity:.2}50%{scale:1;opacity:1}}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
+
+/* ---------- 1. Home ---------- */
+.home{background:linear-gradient(#7ED3FF,#C9F0FF 46%,#A8E28B 46%,#6CC66A)}
+.sunray{position:absolute;left:50%;top:150px;width:560px;height:560px;margin:-280px;border-radius:50%;background:repeating-conic-gradient(rgba(255,255,255,.35) 0 8deg,rgba(255,255,255,0) 8deg 20deg);-webkit-mask:radial-gradient(closest-side,#000 20%,transparent 78%);mask:radial-gradient(closest-side,#000 20%,transparent 78%);animation:spin 60s linear infinite}
+.hill{position:absolute;border-radius:50%;background:#8FDB79}
+.tree{position:absolute;left:50%;top:176px;width:250px;height:330px;margin-left:-125px;animation:bob 4s ease-in-out infinite}
+.top{position:absolute;left:10px;right:10px;top:16px;display:flex;align-items:center;gap:6px;animation:drop .4s cubic-bezier(.2,.9,.3,1) .1s both}
+.lvl{position:relative;width:44px;height:44px;flex:none;border-radius:14px;background:var(--plum);box-shadow:0 0 0 3px var(--ink),0 4px 0 3px var(--ink);display:flex;align-items:center;justify-content:center;font-size:20px}
+.side{position:absolute;right:12px;top:78px;display:flex;flex-direction:column;gap:14px;animation:fade .4s ease-out .5s both}
+.side .k{width:56px;height:54px;border-radius:16px}
+.banner{position:absolute;left:50%;top:86px;translate:-50% 0;padding:2px 18px 4px;border-radius:14px;background:var(--cream);box-shadow:0 0 0 3px var(--ink),0 5px 0 3px rgba(43,33,69,.35);font-size:15px;white-space:nowrap;animation:pop .4s cubic-bezier(.34,1.56,.64,1) .45s both}
+.play{position:absolute;left:50%;bottom:118px;width:236px;height:84px;margin-left:-118px;border-radius:26px;flex-direction:column;line-height:1;overflow:visible;animation:rise .5s cubic-bezier(.34,1.56,.64,1) .55s both,breathe 1.6s ease-in-out 1.2s infinite}
+.play .big{font-size:34px;-webkit-text-stroke-width:6px}
+.play .small{margin-top:2px;font-size:14px;-webkit-text-stroke-width:3px}
+.shine{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none}
+.shine::after{content:"";position:absolute;left:0;top:-20%;width:22%;height:140%;background:rgba(255,255,255,.5);transform:skewX(-18deg);animation:sweep 3.2s ease-in-out 1.5s infinite}
+.tabs{position:absolute;left:0;right:0;bottom:0;height:84px;display:flex;align-items:flex-end;justify-content:space-around;padding:0 6px 10px;background:rgba(43,33,69,.86);border-radius:26px 26px 0 0;animation:rise .4s cubic-bezier(.2,.9,.3,1) .2s both}
+.tab{position:relative;width:58px;height:58px;border-radius:16px;flex-direction:column;font-size:11.5px;line-height:1;-webkit-text-stroke-width:2.5px}
+.tab.on{width:70px;height:74px;outline:3px solid #fff;outline-offset:2px;font-size:13px}
+
+/* ---------- 2. Level: goal, risk, choices, helpers ---------- */
+.level{background:linear-gradient(#BFE9FF,#E9F8FF)}
+.head{position:absolute;left:12px;right:12px;top:16px;display:flex;align-items:center;justify-content:space-between}
+.title{position:absolute;left:50%;top:14px;translate:-50% 0;font-size:24px}
+.crate{position:absolute;left:28px;right:28px;top:74px;height:170px;border-radius:24px;background:linear-gradient(#FFE9B8,#F6C97B);box-shadow:0 0 0 3px var(--ink),0 7px 0 3px #B8843A,inset 0 0 0 6px #FFF4D6}
+.crate .tag{position:absolute;right:-8px;top:-10px;height:30px;padding:0 12px;border-radius:999px;background:var(--go);box-shadow:0 0 0 3px var(--ink);color:#fff;font-size:17px;line-height:30px;-webkit-text-stroke:0}
+.goal{position:absolute;inset:18px 16px;display:flex;align-items:center;justify-content:space-around}
+.want{position:relative;width:74px;height:98px;border-radius:18px;background:rgba(255,255,255,.75);box-shadow:inset 0 0 0 2.5px rgba(43,33,69,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:18px}
+.want.done{background:#C9F5C6}
+.want .ok{position:absolute;right:-7px;top:-7px;width:24px;height:24px;border-radius:50%;background:var(--go);box-shadow:0 0 0 3px var(--ink);display:flex;align-items:center;justify-content:center}
+.tray{position:absolute;left:14px;right:14px;top:270px;height:60px;border-radius:18px;background:var(--ink);display:flex;align-items:center;justify-content:space-between;padding:0 8px;box-shadow:0 5px 0 rgba(43,33,69,.3)}
+.slot{width:40px;height:44px;border-radius:12px;background:#453A6B;display:flex;align-items:center;justify-content:center}
+.slot.warn{box-shadow:inset 0 0 0 3px var(--red)}
+.trayNote{position:absolute;left:0;right:0;top:334px;text-align:center;font-size:13px;color:#6B5FA0}
+.field{position:absolute;left:22px;right:22px;top:372px;display:grid;grid-template-columns:repeat(5,1fr);gap:16px 8px}
+.piece{position:relative;height:56px;border-radius:50%;background:var(--cream);box-shadow:0 0 0 3px var(--ink),0 5px 0 3px #B9AED8;display:flex;align-items:center;justify-content:center}
+.piece.hint::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:4px solid var(--sun);animation:ring 1.3s ease-out infinite}
+.hand{position:absolute;right:-14px;bottom:-18px;z-index:2;animation:tap 1.3s ease-in-out infinite}
+.boost{position:absolute;left:0;right:0;bottom:22px;display:flex;justify-content:center;gap:18px}
+.boost .k{width:62px;height:58px;border-radius:50%}
+
+/* ---------- 3. Win: scrim, rays, prize, sparkles, numbers, the way on ---------- */
+.win{background:linear-gradient(#BFE9FF,#E9F8FF)}
+.scrim{position:absolute;inset:0;background:rgba(32,22,60,.72);animation:fade .3s ease-out both}
+.rays{position:absolute;left:50%;top:250px;width:760px;height:760px;margin:-380px;border-radius:50%;background:repeating-conic-gradient(rgba(255,201,60,.55) 0 9deg,rgba(255,201,60,0) 9deg 18deg);-webkit-mask:radial-gradient(closest-side,#000 25%,transparent 80%);mask:radial-gradient(closest-side,#000 25%,transparent 80%);animation:fade .5s ease-out .2s both,spin 24s linear infinite}
+.ribbon{position:absolute;left:50%;top:110px;translate:-50% 0;rotate:-5deg;padding:0 30px 4px;border-radius:16px;background:var(--pink);box-shadow:0 0 0 3px var(--ink),0 7px 0 3px var(--pink2);font-size:46px;line-height:66px;animation:stamp .4s cubic-bezier(.34,1.56,.64,1) .25s both}
+.stars{position:absolute;left:0;right:0;top:206px;display:flex;justify-content:center;align-items:flex-end;gap:6px}
+.stars svg{animation:stamp .32s cubic-bezier(.34,1.56,.64,1) both}
+.stars svg:nth-child(1){animation-delay:.65s}.stars svg:nth-child(2){animation-delay:.9s;margin-bottom:16px}.stars svg:nth-child(3){animation-delay:1.15s}
+.loot{position:absolute;left:0;right:0;top:330px;display:flex;justify-content:center;gap:14px}
+.tile{width:104px;height:116px;border-radius:22px;background:var(--cream);box-shadow:0 0 0 3px var(--ink),0 6px 0 3px #CFC3A6;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px;animation:pop .35s cubic-bezier(.34,1.56,.64,1) both}
+.tile:nth-child(1){animation-delay:1.45s}.tile:nth-child(2){animation-delay:1.57s}.tile:nth-child(3){animation-delay:1.69s}
+.tile small{font-size:13px;color:#7A6FA8}
+.xp{position:absolute;left:44px;right:44px;top:474px;height:30px;border-radius:999px;background:var(--ink);overflow:hidden;animation:fade .3s ease-out 1.9s both}
+.xp i{display:block;width:72%;height:100%;border-radius:999px;background:linear-gradient(var(--sky),var(--sky2));transform-origin:0 50%;animation:fill .7s ease-out 2s both}
+@keyframes fill{from{scale:.35 1}to{scale:1 1}}
+.xp span{position:absolute;inset:0;text-align:center;color:#fff;font-size:15px;line-height:30px}
+.next{position:absolute;left:50%;bottom:92px;width:232px;height:78px;margin-left:-116px;border-radius:24px;font-size:34px;-webkit-text-stroke-width:6px;animation:rise .45s cubic-bezier(.34,1.56,.64,1) 2.2s both,breathe 1.6s ease-in-out 2.8s infinite}
+.twice{position:absolute;left:50%;bottom:34px;width:180px;height:42px;margin-left:-90px;border-radius:14px;font-size:16px;gap:6px;-webkit-text-stroke-width:3px;animation:fade .3s ease-out 2.5s both}
+.spark{position:absolute;animation:twinkle 1.6s ease-in-out infinite}
+.confetti{position:absolute;top:0;width:9px;height:15px;border-radius:2px;animation:fall 2.6s linear 1.2s both}
+</style>
+</head>
+<body>
+
+<!-- One icon family: light from the top left, one ink outline, three values each. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="coin" viewBox="0 0 32 32"><circle cx="16" cy="17" r="12" fill="#D99412" stroke="#2B2145" stroke-width="2.5"/><circle cx="16" cy="15" r="12" fill="#FFC93C" stroke="#2B2145" stroke-width="2.5"/><circle cx="16" cy="15" r="7" fill="none" stroke="#D99412" stroke-width="2.5"/><path d="M9 11a8 8 0 0 1 6-4" stroke="#FFF3C4" stroke-width="2.5" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="gem" viewBox="0 0 32 32"><path d="M9 5h14l6 8-13 15L3 13z" fill="#9B6BFF" stroke="#2B2145" stroke-width="2.5" stroke-linejoin="round"/><path d="M3 13h26M12 5l-2 8 6 15 6-15-2-8" stroke="#6A3FD6" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M10 7.500l-3 4" stroke="#E4D6FF" stroke-width="2.500" stroke-linecap="round"/></symbol>
+    <symbol id="heart" viewBox="0 0 32 32"><path d="M16 27C6 20 3 15 3 11a6.500 6.500 0 0 1 13-1 6.500 6.500 0 0 1 13 1c0 4-3 9-13 16z" fill="#FF5E7A" stroke="#2B2145" stroke-width="2.5" stroke-linejoin="round"/><path d="M8 9.500a3.500 3.500 0 0 1 3-2" stroke="#FFD0D9" stroke-width="2.500" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="star" viewBox="0 0 64 64"><path d="M32 5l8.300 17 18.700 2.700-13.500 13.200 3.200 18.600L32 47.700 15.300 56.500l3.200-18.600L5 24.700 23.700 22z" fill="#FFC93C" stroke="#2B2145" stroke-width="4" stroke-linejoin="round"/><path d="M32 13l5.500 11.500" stroke="#FFF3C4" stroke-width="4" stroke-linecap="round"/></symbol>
+    <!-- fruit: each has its own outline shape, so it reads without colour -->
+    <symbol id="apple" viewBox="0 0 40 40"><path d="M20 12c-7-5-15 0-14 9 1 9 8 15 14 12 6 3 13-3 14-12 1-9-7-14-14-9z" fill="#F0443A" stroke="#2B2145" stroke-width="2.800" stroke-linejoin="round"/><path d="M20 12c0-4 2-7 5-8" stroke="#2B2145" stroke-width="2.800" stroke-linecap="round" fill="none"/><path d="M11 17a5 5 0 0 1 4-3" stroke="#FFC2BD" stroke-width="2.800" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="pear" viewBox="0 0 40 40"><path d="M20 6c-4 0-6 3-6 7 0 3-6 6-6 13a12 12 0 0 0 24 0c0-7-6-10-6-13 0-4-2-7-6-7z" fill="#58D66B" stroke="#2B2145" stroke-width="2.800" stroke-linejoin="round"/><path d="M20 6V2.500" stroke="#2B2145" stroke-width="2.800" stroke-linecap="round"/><path d="M13 22a6 6 0 0 1 2-4" stroke="#D5F7D9" stroke-width="2.800" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="plum" viewBox="0 0 40 40"><circle cx="20" cy="22" r="13" fill="#9B6BFF" stroke="#2B2145" stroke-width="2.800"/><path d="M20 9c1-3 4-5 8-5-1 4-4 6-8 5z" fill="#58D66B" stroke="#2B2145" stroke-width="2.400" stroke-linejoin="round"/><path d="M12 19a8 8 0 0 1 5-5" stroke="#E4D6FF" stroke-width="2.800" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="lemon" viewBox="0 0 40 40"><path d="M4 22c2-10 10-15 20-13 4-3 9-2 11 1-1 2 0 4-1 8-2 9-10 15-20 13-4 3-9 2-11-1 1-2 0-4 1-8z" fill="#FFC93C" stroke="#2B2145" stroke-width="2.800" stroke-linejoin="round"/><path d="M11 20a9 9 0 0 1 7-6" stroke="#FFF3C4" stroke-width="2.800" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="berry" viewBox="0 0 40 40"><path d="M20 36C10 30 6 24 7 17c1-5 6-7 13-7s12 2 13 7c1 7-3 13-13 19z" fill="#5AB8FF" stroke="#2B2145" stroke-width="2.800" stroke-linejoin="round"/><path d="M12 10l8-5 8 5-8 3z" fill="#58D66B" stroke="#2B2145" stroke-width="2.400" stroke-linejoin="round"/><circle cx="15" cy="20" r="1.600" fill="#2B2145"/><circle cx="24" cy="19" r="1.600" fill="#2B2145"/><circle cx="20" cy="26" r="1.600" fill="#2B2145"/></symbol>
+    <!-- glyphs: flat, one stroke weight, never competing with the toys -->
+    <symbol id="g-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke="#2B2145" stroke-width="4.500" stroke-linecap="round"/></symbol>
+    <symbol id="g-bulb" viewBox="0 0 24 24"><path d="M12 3a6.500 6.500 0 0 0-4 11.600V17h8v-2.400A6.500 6.500 0 0 0 12 3zM9.500 21h5" fill="#FFF3C4" stroke="#2B2145" stroke-width="2.600" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+    <symbol id="g-undo" viewBox="0 0 24 24"><path d="M8 5L3.500 9.500 8 14M4 9.500h10a6 6 0 0 1 0 12h-3" fill="none" stroke="#2B2145" stroke-width="3.200" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="g-mix" viewBox="0 0 24 24"><path d="M3 7h4l8 10h6M3 17h4l2.500-3M14 8.500L15 7h6M18 4l3 3-3 3M18 14l3 3-3 3" fill="none" stroke="#2B2145" stroke-width="2.800" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="g-check" viewBox="0 0 24 24"><path d="M5 12.500l4.500 4.500L19 7.500" fill="none" stroke="#2B2145" stroke-width="4.500" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="g-gift" viewBox="0 0 28 28"><rect x="4" y="11" width="20" height="13" rx="3" fill="#FFF9EC" stroke="#2B2145" stroke-width="2.500"/><rect x="2.500" y="7" width="23" height="6" rx="2" fill="#FFC93C" stroke="#2B2145" stroke-width="2.500"/><path d="M14 7v17M14 7c-3-6-9-3-5 0M14 7c3-6 9-3 5 0" fill="none" stroke="#2B2145" stroke-width="2.500" stroke-linecap="round"/></symbol>
+    <symbol id="g-flag" viewBox="0 0 28 28"><path d="M7 25V4" stroke="#2B2145" stroke-width="3" stroke-linecap="round"/><path d="M7 5h15l-4 5 4 5H7z" fill="#FFF9EC" stroke="#2B2145" stroke-width="2.500" stroke-linejoin="round"/></symbol>
+    <symbol id="t-shop" viewBox="0 0 30 30"><path d="M4 12l2-7h18l2 7z" fill="#FF7FB0" stroke="#2B2145" stroke-width="2.400" stroke-linejoin="round"/><rect x="6" y="12" width="18" height="13" rx="2" fill="#FFF9EC" stroke="#2B2145" stroke-width="2.400"/><rect x="12" y="16" width="6" height="9" fill="#5AB8FF" stroke="#2B2145" stroke-width="2.200"/></symbol>
+    <symbol id="t-book" viewBox="0 0 30 30"><path d="M4 7c4-2 8-2 11 0 3-2 7-2 11 0v16c-4-2-8-2-11 0-3-2-7-2-11 0z" fill="#FFF9EC" stroke="#2B2145" stroke-width="2.400" stroke-linejoin="round"/><path d="M15 7v16" stroke="#2B2145" stroke-width="2.400"/></symbol>
+    <symbol id="t-tree" viewBox="0 0 30 30"><rect x="13" y="17" width="4" height="9" rx="1" fill="#B8843A" stroke="#2B2145" stroke-width="2.200"/><circle cx="15" cy="12" r="9" fill="#58D66B" stroke="#2B2145" stroke-width="2.400"/><circle cx="12" cy="11" r="2" fill="#F0443A"/><circle cx="18" cy="14" r="2" fill="#FFC93C"/></symbol>
+    <symbol id="t-team" viewBox="0 0 30 30"><circle cx="11" cy="11" r="4.500" fill="#FFF9EC" stroke="#2B2145" stroke-width="2.400"/><path d="M3 25c0-5 4-8 8-8s8 3 8 8z" fill="#5AB8FF" stroke="#2B2145" stroke-width="2.400" stroke-linejoin="round"/><circle cx="21" cy="12" r="3.500" fill="#FFF9EC" stroke="#2B2145" stroke-width="2.200"/><path d="M20 18c4 0 7 2.500 7 7h-6" fill="#FFC93C" stroke="#2B2145" stroke-width="2.200" stroke-linejoin="round"/></symbol>
+    <symbol id="t-cup" viewBox="0 0 30 30"><path d="M9 5h12v7a6 6 0 0 1-12 0zM9 7H5c0 4 2 6 5 6M21 7h4c0 4-2 6-5 6M15 18v4M10 25h10" fill="#FFC93C" stroke="#2B2145" stroke-width="2.400" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+    <symbol id="spark" viewBox="0 0 24 24"><path d="M12 1l2.400 8.600L23 12l-8.600 2.400L12 23l-2.400-8.600L1 12l8.600-2.400z" fill="#fff"/></symbol>
+    <symbol id="hand" viewBox="0 0 40 44"><path d="M14 22V8a3.500 3.500 0 0 1 7 0v10l9 2c3 .700 4.500 3 4 6l-2 11c-.500 3-2.500 4.500-5.500 4.500H17c-2.500 0-4-1-5.500-3L5 28c-1.500-2.500 1.500-5.500 4-3.500z" fill="#fff" stroke="#2B2145" stroke-width="2.800" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<h1>Pocket Orchard</h1>
+<p class="sub">An example made with the mobile-game-ui skill: an original, made-up fruit-sorting puzzle. Three screens share one system: green means go, yellow is reward, red is only ever an alert. Reload the page to replay the motion.</p>
+
+<div class="row">
+
+  <!-- 1. HOME: the orchard is the background, what you own is on top, one big warm button under the thumb -->
+  <figure>
+    <div class="phone home">
+      <div class="sunray"></div>
+      <div class="hill" style="left:-80px;top:300px;width:300px;height:160px"></div>
+      <div class="hill" style="right:-110px;top:286px;width:340px;height:190px;background:#7FD06E"></div>
+      <svg class="tree" viewBox="0 0 250 330" aria-hidden="true">
+        <ellipse cx="125" cy="318" rx="88" ry="12" fill="rgba(43,33,69,.18)"/>
+        <path d="M108 316c6-40 6-80-2-120h38c-8 40-8 80-2 120z" fill="#B8843A" stroke="#2B2145" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="74" cy="148" r="62" fill="#4CC766" stroke="#2B2145" stroke-width="5"/>
+        <circle cx="178" cy="150" r="60" fill="#4CC766" stroke="#2B2145" stroke-width="5"/>
+        <circle cx="125" cy="92" r="78" fill="#58D66B" stroke="#2B2145" stroke-width="5"/>
+        <circle cx="125" cy="150" r="60" fill="#58D66B"/>
+        <path d="M78 62a60 60 0 0 1 40-36" stroke="#B9F5C1" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <use href="#apple" x="62" y="96" width="46" height="46"/><use href="#lemon" x="134" y="62" width="46" height="46"/>
+        <use href="#plum" x="156" y="136" width="44" height="44"/><use href="#pear" x="92" y="156" width="44" height="44"/>
+        <use href="#apple" x="34" y="150" width="38" height="38"/>
+      </svg>
+      <svg class="spark" style="left:74px;top:214px;animation-delay:.2s" width="20" height="20"><use href="#spark"/></svg>
+      <svg class="spark" style="left:262px;top:250px;animation-delay:.9s" width="16" height="16"><use href="#spark"/></svg>
+
+      <div class="top">
+        <div class="lvl d" style="-webkit-text-stroke-width:4px">24</div>
+        <div class="pill"><svg width="28" height="28"><use href="#heart"/></svg>5</div>
+        <div style="flex:1"></div>
+        <div class="pill"><svg width="28" height="28"><use href="#coin"/></svg>1,240</div>
+        <div class="pill"><svg width="28" height="28"><use href="#gem"/></svg>35</div>
+      </div>
+      <div class="banner">Harvest Fair · 2d 4h</div>
+      <div class="side">
+        <button class="k sun" aria-label="Daily gift, ready"><svg width="34" height="34"><use href="#g-gift"/></svg><span class="dot">1</span></button>
+        <button class="k pinkb" aria-label="Event"><svg width="34" height="34"><use href="#g-flag"/></svg></button>
+      </div>
+
+      <button class="k go play"><span class="shine"></span><span class="big">LEVEL 24</span><span class="small">Plum Lane</span></button>
+
+      <div class="tabs">
+        <button class="k pinkb tab"><svg width="32" height="32"><use href="#t-shop"/></svg>Shop<span class="dot">!</span></button>
+        <button class="k skyb tab"><svg width="32" height="32"><use href="#t-book"/></svg>Album</button>
+        <button class="k go tab on"><svg width="40" height="40"><use href="#t-tree"/></svg>Orchard</button>
+        <button class="k sun tab"><svg width="32" height="32"><use href="#t-team"/></svg>Team<span class="dot">3</span></button>
+        <button class="k white tab" style="color:#fff"><svg width="32" height="32"><use href="#t-cup"/></svg>Cups</button>
+      </div>
+    </div>
+    <figcaption><b>Home</b>The world is the background. One big warm button.</figcaption>
+  </figure>
+
+  <!-- 2. LEVEL: read top to bottom in the order you decide: goal, risk, choices, helpers -->
+  <figure>
+    <div class="phone level">
+      <div class="head">
+        <div class="pill"><svg width="28" height="28"><use href="#coin"/></svg>1,240</div>
+        <button class="k white" style="width:44px;height:40px;border-radius:14px" aria-label="Pause"><svg width="22" height="22"><use href="#g-pause"/></svg></button>
+      </div>
+      <div class="title d">Level 24</div>
+
+      <div class="crate">
+        <span class="tag">1 / 3</span>
+        <div class="goal">
+          <div class="want done"><svg width="46" height="46"><use href="#apple"/></svg><span class="ok"><svg width="16" height="16"><use href="#g-check"/></svg></span>6 / 6</div>
+          <div class="want"><svg width="46" height="46"><use href="#plum"/></svg>2 / 6</div>
+          <div class="want"><svg width="46" height="46"><use href="#lemon"/></svg>0 / 3</div>
+        </div>
+      </div>
+
+      <div class="tray" aria-label="Holding tray, 5 of 7 full">
+        <div class="slot"><svg width="34" height="34"><use href="#plum"/></svg></div>
+        <div class="slot"><svg width="34" height="34"><use href="#plum"/></svg></div>
+        <div class="slot"><svg width="34" height="34"><use href="#pear"/></svg></div>
+        <div class="slot"><svg width="34" height="34"><use href="#lemon"/></svg></div>
+        <div class="slot"><svg width="34" height="34"><use href="#berry"/></svg></div>
+        <div class="slot warn"></div>
+        <div class="slot warn"></div>
+      </div>
+      <div class="trayNote">Match 3 to clear · a full tray ends the level</div>
+
+      <div class="field">
+        <div class="piece"><svg width="38" height="38"><use href="#lemon"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#pear"/></svg></div>
+        <div class="piece hint"><svg width="38" height="38"><use href="#plum"/></svg><svg class="hand" width="38" height="42"><use href="#hand"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#berry"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#lemon"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#berry"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#plum"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#pear"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#lemon"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#plum"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#pear"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#berry"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#plum"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#lemon"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#pear"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#berry"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#lemon"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#plum"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#pear"/></svg></div>
+        <div class="piece"><svg width="38" height="38"><use href="#berry"/></svg></div>
+      </div>
+
+      <div class="boost">
+        <button class="k sun" aria-label="Hint, 3 left"><svg width="30" height="30"><use href="#g-bulb"/></svg><span class="count">3</span></button>
+        <button class="k skyb" aria-label="Undo, 2 left"><svg width="30" height="30"><use href="#g-undo"/></svg><span class="count">2</span></button>
+        <button class="k pinkb" aria-label="Shuffle, 1 left"><svg width="30" height="30"><use href="#g-mix"/></svg><span class="count">1</span></button>
+      </div>
+    </div>
+    <figcaption><b>Level</b>Goal, then risk (the tray), then choices. No sentences needed.</figcaption>
+  </figure>
+
+  <!-- 3. WIN: layered back to front and timed in beats; the one way on arrives last -->
+  <figure>
+    <div class="phone win">
+      <div class="scrim"></div>
+      <div class="rays"></div>
+      <div class="ribbon d" style="-webkit-text-stroke-width:7px">SWEET!</div>
+      <div class="stars">
+        <svg width="78" height="78"><use href="#star"/></svg><svg width="96" height="96"><use href="#star"/></svg><svg width="78" height="78"><use href="#star"/></svg>
+      </div>
+      <svg class="spark" style="left:52px;top:196px" width="22" height="22"><use href="#spark"/></svg>
+      <svg class="spark" style="left:292px;top:226px;animation-delay:.7s" width="18" height="18"><use href="#spark"/></svg>
+      <svg class="spark" style="left:176px;top:170px;animation-delay:1.1s" width="14" height="14"><use href="#spark"/></svg>
+      <div class="loot">
+        <div class="tile"><svg width="50" height="50"><use href="#coin"/></svg>+120<small>Coins</small></div>
+        <div class="tile"><svg width="50" height="50"><use href="#gem"/></svg>+1<small>Gem</small></div>
+        <div class="tile"><svg width="50" height="50"><use href="#plum"/></svg>New<small>Album card</small></div>
+      </div>
+      <div class="xp"><i></i><span>Harvest chest · 18 / 25</span></div>
+      <button class="k go next">NEXT</button>
+      <button class="k sun twice"><svg width="22" height="22"><use href="#coin"/></svg>Double it · ad</button>
+      <i class="confetti" style="left:30px;background:#FF7FB0;--dx:40px"></i><i class="confetti" style="left:84px;background:#FFC93C;--dx:-30px;animation-delay:1.35s"></i>
+      <i class="confetti" style="left:140px;background:#5AB8FF;--dx:26px;animation-delay:1.5s"></i><i class="confetti" style="left:196px;background:#58D66B;--dx:-44px;animation-delay:1.25s"></i>
+      <i class="confetti" style="left:250px;background:#9B6BFF;--dx:30px;animation-delay:1.6s"></i><i class="confetti" style="left:306px;background:#FF7FB0;--dx:-22px;animation-delay:1.4s"></i>
+      <i class="confetti" style="left:60px;background:#58D66B;--dx:60px;animation-delay:1.9s"></i><i class="confetti" style="left:224px;background:#FFC93C;--dx:-60px;animation-delay:2.1s"></i>
+      <i class="confetti" style="left:330px;background:#5AB8FF;--dx:-70px;animation-delay:1.8s"></i><i class="confetti" style="left:112px;background:#9B6BFF;--dx:-12px;animation-delay:2.3s"></i>
+    </div>
+    <figcaption><b>Win</b>Rays, a slanted title, stars in beats, then one way on.</figcaption>
+  </figure>
+
+</div>
+</body>
+</html>

@@ -41,7 +41,8 @@ light end of the scale: three header items, a goal picture, a holding tray, one 
 Copy the `mobile-game-ui` folder into your Claude skills folder:
 
 ```bash
-git clone <this repo's URL> && cp -R <repo folder>/mobile-game-ui ~/.claude/skills/
+git clone https://github.com/ahmed1921/mobile-game-ui-skill.git
+cp -R mobile-game-ui-skill/mobile-game-ui ~/.claude/skills/
 ```
 
 Start a new Claude Code session. Claude loads the skill by itself when you ask for game UI work.

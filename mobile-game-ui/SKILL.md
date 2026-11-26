@@ -1,6 +1,6 @@
 ---
 name: mobile-game-ui
-description: Design original mobile game GUI the way top-grossing games do, and build it in Unity. Use this whenever the user asks to design, redesign, mock up, restyle, critique or implement any mobile game screen, HUD, menu, popup, button set or UI art direction (home or lobby, stage map, battle HUD, results, hero or card collection, shop, upgrade screens), asks how a hit game lays out its UI, wants an HTML mockup of a game, or wants a mockup turned into Unity UI (uGUI or UI Toolkit). Also use it for game icons (app icon, currency, item, skill and tab icons), UI animation, VFX and reward moments, and for explaining why a game UI pattern works. Built from a study of 151 top mobile games and their app icons, motion and icon craft research, and Unity's own UI guidance. Use it even when the user only says "make the UI look better" or "design the GUI". Pairs with game-ui-patterns (screen taxonomy and motion specs) and unity:ui-ugui (engine API details).
+description: Design original mobile game GUI the way top-grossing games do, and build it in Unity. Use this whenever the user asks to design, redesign, mock up, restyle, critique or implement any mobile game screen, HUD, menu, popup, button set or UI art direction (home or lobby, stage map, battle HUD, results, hero or card collection, shop, upgrade screens), asks how a hit game lays out its UI, wants an HTML mockup of a game, or wants a mockup turned into Unity UI (uGUI or UI Toolkit). Also use it for game icons (app icon, currency, item, skill and tab icons), UI animation, VFX and reward moments, and for explaining why a game UI pattern works. Use it even when the user only says "make the UI look better" or "design the GUI". Pairs with game-ui-patterns (screen taxonomy and motion specs) and unity:ui-ugui (engine API details).
 ---
 
 # Mobile Game UI: design it, then build it in Unity
@@ -9,10 +9,7 @@ Good mobile game UI is not decoration. It is a small set of conventions that hun
 players already know, dressed in a look that belongs to one game. Your job is to keep the conventions
 and invent the look.
 
-This skill comes from studying the store screens and known interfaces of 151 top mobile games (the
-US App Store top 100 grossing and top 100 free game charts on 2026-11-26 and 27, plus 10 leaders in
-battler, roguelite and collector genres), the app icons of the top 150, and published guidance on
-motion, game feel, icon craft and reach. The per-game notes are in
+Notes on how top games in each genre lay out their screens are in
 [references/top-games.md](references/top-games.md).
 
 ## Workflow
@@ -48,7 +45,7 @@ motion, game feel, icon craft and reach. The per-game notes are in
 
 ## The rules that held across the top games
 
-These showed up in nearly every game studied. Break one only on purpose.
+These hold in nearly every top game. Break one only on purpose.
 
 1. **One primary action per screen, and it is the biggest, warmest thing on it.** PLAY, FIGHT, SPIN,
    CONTINUE. It sits where the thumb rests: bottom centre in portrait, bottom right in landscape.
@@ -97,11 +94,8 @@ These showed up in nearly every game studied. Break one only on purpose.
 Do this when the user asks for references, when the genre is one you have not designed for, or when
 you doubt a convention.
 
-- App Store charts and screenshots need no login. Top grossing games:
-  `https://itunes.apple.com/us/rss/topgrossingapplications/limit=100/genre=6014/json` (100 is the most it returns; `topfreeapplications` is the free chart). Icons are in each entry under `im:image`. Screens for an
-  app: `https://itunes.apple.com/lookup?id=<trackId>` and read `screenshotUrls`. Lay them out in a
-  local contact sheet and view it in a browser. Many store shots are marketing art, so take four per
-  game and read the ones that show a real screen.
+- Store pages show a game's screens without a login. Many store shots are marketing art, so look at
+  several per game and read the ones that show a real screen.
 - interfaceingame.com has real in-game captures grouped by game and by screen type.
 - gameuidatabase.com is the deepest library but sits behind a human check. Ask the user to pass it;
   do not try to get around it.

@@ -3,8 +3,8 @@
 A skill for [Claude Code](https://claude.com/claude-code) that teaches Claude to design mobile game
 interfaces the way top-grossing games do, mock them up, and build them in Unity.
 
-It covers layout, visual systems, icons, animation and VFX, the reasons the patterns work, and a
-1:1 route from an HTML mockup to Unity UI.
+It covers layout, visual systems, icons, animation and VFX, the reasons the patterns work, and
+building the result in Unity.
 
 ## Examples
 
@@ -66,14 +66,14 @@ To use it in one project only, put the folder in that project's `.claude/skills/
 
 | File | What it holds |
 |------|---------------|
-| `SKILL.md` | The workflow and 18 rules that held across the games studied |
+| `SKILL.md` | The workflow and 18 rules |
 | `references/layout-patterns.md` | Wireframes: home, map, HUDs by genre, results, collection, shop, popups, skill tree, and the templates newer hits share |
 | `references/visual-design.md` | Colour roles, shape, type, style families, a mockup recipe, common failures |
 | `references/icons.md` | App icon and in-game icon sets: families, anatomy, conventions, badges, sizes, tests |
 | `references/motion-and-vfx.md` | Timing table, recipes per moment, a VFX kit, layering a reward, sound, restraint |
 | `references/why-it-works.md` | The hand, the eye, habit, motivation, mood and audience, honest use |
-| `references/top-games.md` | Notes on 151 top mobile games, grouped by genre and by shared template |
-| `references/unity-build.md` | Building it in Unity, and lessons from a 1:1 mockup port |
+| `references/top-games.md` | How top mobile games lay out their screens, by genre and by shared template |
+| `references/unity-build.md` | Building it in Unity |
 
 ## Limits
 

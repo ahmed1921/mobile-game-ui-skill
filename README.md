@@ -75,18 +75,10 @@ To use it in one project only, put the folder in that project's `.claude/skills/
 | `references/top-games.md` | Notes on 151 top mobile games, grouped by genre and by shared template |
 | `references/unity-build.md` | Building it in Unity, and lessons from a 1:1 mockup port |
 
-## Where it comes from
-
-- The store screens and widely known layouts of 151 games from the US App Store top-grossing and
-  top-free game charts (November 2026), plus the app icons of the top 150.
-- Published guidance on motion, game feel, icon design and reach.
-- A full port of a 13-screen HTML mockup into Unity.
-
 ## Limits
 
-- Store screenshots are partly marketing art, and they are stills. The motion guidance comes from
-  published sources and practice, not from frame-by-frame study of each game.
-- Charts change. Check the live game when one detail matters.
+- Timings and sizes are starting points. Tune them on a real phone.
+- Games and charts change. Check the live game when one detail matters.
 - The skill teaches conventions and craft. It tells Claude not to copy any game's art, characters
   or exact look.
 

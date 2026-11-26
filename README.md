@@ -9,7 +9,10 @@ It covers layout, visual systems, icons, animation and VFX, the reasons the patt
 ## Examples
 
 Both are made-up games designed with this skill. Everything is drawn in the page (no image files),
-and the motion is built in: open the HTML in a browser to see it move.
+and the motion is built in. Open them live:
+
+- [Ember Keep, live](https://ahmed1921.github.io/mobile-game-ui-skill/examples/ember-keep.html)
+- [Pocket Orchard, live](https://ahmed1921.github.io/mobile-game-ui-skill/examples/pocket-orchard.html)
 
 ### Ember Keep: a detailed example (six screens)
 
